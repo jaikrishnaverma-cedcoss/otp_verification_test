@@ -1,0 +1,102 @@
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.btn {
+  padding: 8px 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  border: none;
+}
+
+.btn-primary {
+  background-color: blue;
+  color: white;
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.507);
+  position: absolute;
+  padding: 0px;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-card {
+  border-radius: 5px;
+  background-color: white;
+  padding: 10px 20px;
+  min-width: 400px;
+}
+
+.modal-card .heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid grey;
+}
+
+.modal-card .body .boxes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 5px;
+}
+
+.modal-card .body p:nth-child(1){
+font-size: 14px;
+}
+
+.modal-card .body .boxes input {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid grey;
+  font-size: 20px;
+  padding: 10px ;
+}
+
+.card-details{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-hidden{
+  display: none;
+}
+
+.alert-input-danger{
+border:1px solid red !important
+} 
+.alert-input-success{
+border:1px solid green !important
+}
+
+.msg-alert-input-danger{
+  color: red !important;
+}
+
+.msg-alert-input-success{
+  color: green !important;
+}
+
+/* chrome safari */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance:none;
+  margin: 0;
+}
+
+input[type=number]{
+  -moz-apperance:textfield;
+}
