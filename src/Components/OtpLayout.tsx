@@ -37,6 +37,7 @@ export const OtpLayout = ({open, GenerateOtp, currentOtp, closeModal}: MyOtpLayo
       setTimer((prev) => (prev == 0 ? 0 : prev - 1));
       console.log('first')
     }, 1000);
+    // callback function for clear interval when component unmount
     return () => {
       clearInterval(interval);
     };
@@ -236,8 +237,8 @@ return (
                 </p>
                 {/* here time formate done while renderning jsx ex: 0:2 => 00:02 */}
                 <p className="timer">{`
-                ${(parseInt((timer / 60).toString())<9)?'0':''}${parseInt((timer / 60).toString())} :
-                ${(parseInt((timer % 60).toString())<9)?'0':''}${timer % 60}`}</p>
+                ${(parseInt((timer / 60).toString())<10)?'0':''}${parseInt((timer / 60).toString())} :
+                ${(parseInt((timer % 60).toString())<10)?'0':''}${timer % 60}`}</p>
               </div>
             </div>
           </div>

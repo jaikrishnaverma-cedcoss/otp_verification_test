@@ -21,8 +21,9 @@ const Register = () => {
   return (
    <>
    <button className="btn btn-primary" onClick={modalOpener}>Validate OTP</button>
-   {/* model can itself open and closed with respect to open:boolean */}
-    {// give conditional rendering just for unmount properly remove all ref and variable memory free
+    {/* model can itself open and closed with respect to open:boolean */}
+    {/* give conditional rendering just for unmount properly remove all ref and variable memory free */}
+    {
         (modalState)&&<OtpLayout open={modalState}  GenerateOtp={GenerateOtp}  currentOtp={currentOtp} closeModal={setModalState}/>
     }
    
