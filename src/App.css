@@ -8,6 +8,7 @@
     padding: 20px;
 }
 
+/* basic button structure */
 .btn {
     padding: 8px 10px;
     font-size: 18px;
@@ -15,11 +16,13 @@
     border: none;
 }
 
+/* primary button color */
 .btn-primary {
     background-color: blue;
     color: white;
 }
 
+/* modal plane*/
 .modal {
     background-color: rgba(0, 0, 0, 0.507);
     position: absolute;
@@ -31,6 +34,7 @@
     justify-content: center;
 }
 
+/* pop-up card under modal */
 .modal-card {
     border-radius: 5px;
     background-color: white;
@@ -38,6 +42,7 @@
     min-width: 400px;
 }
 
+/* heading of modal */
 .modal-card .heading {
     display: flex;
     align-items: center;

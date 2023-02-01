@@ -12,7 +12,7 @@ const initialInput:typeInitialInput = {
 export const OtpLayout = ({open, GenerateOtp, currentOtp, closeModal}: MyOtpLayoutProps) => {
   const successClass = "alert-input-success";
   const errorClass = "alert-input-danger";
-  const [state, setState] = useState({counter: 5, msg: "", loader:false });
+  const [state, setState] = useState({counter: 5, msg: "", loader:false ,modal:true});
   const [timer, setTimer] = useState<number>(60);
   const [inputs, setInputs] = useState<typeInitialInput>({...initialInput});
   const digit1 = useRef<HTMLInputElement>(null);
@@ -154,10 +154,13 @@ export const OtpLayout = ({open, GenerateOtp, currentOtp, closeModal}: MyOtpLayo
     }
     setInputs({ ...inputs });
   };
+  if(!state.modal){
+    return <button className="btn" onClick={() => setState({...state,modal:true})}>Finish remaining OTP verification</button>
+  }
   
 return (
     <>
-      <div className={`container modal ${open ? "" : "modal-hidden"}`}>
+      <div className={`container modal ${state.modal ? "" : "modal-hidden"}`}>
 
             <div className="modal-card">
             <div className="heading">
@@ -165,7 +168,7 @@ return (
                 Verify Email Address{" "}
                 <span style={{ margin: "0px 10px" }}>({currentOtp})</span>
               </p>
-              <button className="btn" onClick={() => closeModal(false)}>
+              <button className="btn" onClick={() => setState({...state,modal:false})}>
                 X
               </button>
             </div>
