@@ -232,7 +232,7 @@ return (
                 <p className={`info ${(timer>0 || state.counter===0)&&'disabled'}`} onClick={ResendOtp}>
                   Resend One-Time Passcode.{" "}
                   <span className="attempts">
-                    ({state.counter} attempts left)
+                    ({state.counter-1} attempts left)
                   </span>
                 </p>
                 {/* here time formate done while renderning jsx ex: 0:2 => 00:02 */}
