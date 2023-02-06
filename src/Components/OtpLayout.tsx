@@ -69,7 +69,7 @@ export const OtpLayout = ({
       setTimer((prev) => (prev == 0 ? 0 : prev - 1));
     }, 1000);
     filler();
-    
+
     // callback function for clear interval when component unmount
     return () => {
       clearInterval(interval);
@@ -117,7 +117,6 @@ export const OtpLayout = ({
 
   //  to handle input backSpace and focus
   const handleBackspace = (e: any, i: number) => {
-    console.log(e.target.value);
     if (e.key === "Backspace" && !inputs.digit[i])
       digit.current[i - 1]?.focus();
     else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();

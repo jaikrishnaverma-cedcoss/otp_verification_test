@@ -38,7 +38,7 @@ const Register = () => {
       );
     }
   };
-  console.log(otpLength);
+ 
   return (
     <>
     <h2>Register Component</h2>
