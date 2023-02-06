@@ -69,6 +69,7 @@ export const OtpLayout = ({
       setTimer((prev) => (prev == 0 ? 0 : prev - 1));
     }, 1000);
     filler();
+    
     // callback function for clear interval when component unmount
     return () => {
       clearInterval(interval);
