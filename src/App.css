@@ -145,11 +145,11 @@ text-decoration: underline;
 }
 
 .alert-input-danger {
-  border: 3px solid red !important
+  border: 2.5px solid red !important
 }
 
 .alert-input-success {
-    border: 3px solid green !important
+    border: 2.5px solid green !important
 }
 
 .spinner__icon {
