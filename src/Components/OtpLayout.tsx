@@ -120,15 +120,7 @@ export const OtpLayout = ({
 
   //  to handle input backSpace and focus
   const handleBackspace = (e: any, i: number) => {
-    console.log(
-      e.key +
-        "===" +
-        "Backspace" +
-        "&&" +
-        inputs.digit[i] +
-        "==" +
-        e.target.value
-    );
+
     let key = e.key === "Backspace" || e.key === "Delete";
     if (key && !inputs.digit[i]) digit.current[i - 1]?.focus();
     else if (e.key === "Backspace" && inputs.digit[i] == e.target.value) {
@@ -138,7 +130,7 @@ export const OtpLayout = ({
     } else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();
     else if (e.key === "ArrowRight") digit.current[i + 1]?.focus();
   };
-  console.log(inputs);
+
   return (
     <>
       <div className={`container modal `}>
