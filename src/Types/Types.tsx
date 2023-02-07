@@ -7,11 +7,10 @@ closeModal:Dispatch<SetStateAction<boolean>>
 currentOtp:number|null
 }
 
-export type typeInitialInput= {
-    digit1: string;
-    digit2: string;
-    digit3: string;
-    digit4: string;
-    digit5: string;
+export type ModalStateTypes = {
+    digit: string[];
     statusClass: string;
-}
+    counter: number,
+    msg: string,
+    loader: boolean,
+  };

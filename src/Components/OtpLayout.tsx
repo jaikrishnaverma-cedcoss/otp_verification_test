@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { MyOtpLayoutProps, typeInitialInput } from "../Types/Types";
+import { MyOtpLayoutProps } from "../Types/Types";
 type inp = {
   digit: string[];
   statusClass: string;
@@ -19,7 +19,6 @@ export const OtpLayout = ({
     counter: 4,
     msg: "",
     loader: false,
-    modal: true,
   });
   const [timer, setTimer] = useState<number>(60);
   const [inputs, setInputs] = useState<inp>({ ...initialInput });
@@ -78,56 +77,64 @@ export const OtpLayout = ({
 
   // responsible to handle all input digits and focus
   const InputDigits = (e: ChangeEvent<HTMLInputElement>, i: number) => {
-    if (
-      /^[0-9]{1}$/.test(e.currentTarget.value) ||
-      e.currentTarget.value === ""
-    ) {
-      if (e.currentTarget.value) {
-        digit.current[i + 1]?.focus();
-        if (i < inputs.digit.length - 1) inputs.digit[i + 1] = "";
+    let val = e.currentTarget.value;
+      if (val.length > 1) {
+        val = val[val.length - 1];
       }
-      inputs.digit[i] = e.currentTarget.value;
-      state.msg = "";
-      inputs.statusClass = "";
-      if (inputs.digit.reduce((final, current) => final && current)) {
-        // status hold the value of otp matched or not
-        let status =
-          inputs.digit.toString().replaceAll(",", "") ===
-          currentOtp?.toString();
-        inputs.statusClass = status ? successClass : errorClass;
-        // if otp matched
-        if (status) {
-          state.msg = "Enter one time passcode is Correct!";
-          state.loader = true;
-          digit.current.forEach((x, index) => {
-            digit.current[index]?.blur();
-          });
-          //  after 1000 ms modal will closed automatically
-          setTimeout(() => {
-            closeModal(false);
-          }, 1000);
-        } else {
-          state.msg = "Enter one time passcode is Incorrect!";
+      
+      if (/^[0-9]{1}$/.test(val) || val === "") {
+        if (val) {
+          digit.current[i + 1]?.focus();
         }
+        if(val &&  inputs.digit[i]!=='')
+        inputs.digit[i+1] = val;
+        else
+        inputs.digit[i] = val;
+        state.msg = "";
+        inputs.statusClass = "";
+        if (inputs.digit.reduce((final, current) => final && current)) {
+          // status hold the value of otp matched or not
+          let status =
+            inputs.digit.toString().replaceAll(",", "") ===
+            currentOtp?.toString();
+          inputs.statusClass = status ? successClass : errorClass;
+          // if otp matched
+          if (status) {
+            state.msg = "Enter one time passcode is Correct!";
+            state.loader = true;
+            digit.current.forEach((x, index) => {
+              digit.current[index]?.blur();
+            });
+            //  after 1000 ms modal will closed automatically
+            setTimeout(() => {
+              closeModal(false);
+            }, 1000);
+          } else {
+            state.msg = "Enter one time passcode is Incorrect!";
+          }
+        }
+        setInputs({ ...inputs });
+        setState({ ...state });
       }
-      setInputs({ ...inputs });
-      setState({ ...state });
-    }
+    
   };
 
   //  to handle input backSpace and focus
   const handleBackspace = (e: any, i: number) => {
-    if (e.key === "Backspace" && !inputs.digit[i])
+    console.log(e.key +'==='+ "Backspace" +'&&'+ inputs.digit[i] +'=='+ e.target.value)
+    let key=(e.key==="Backspace" || e.key === "Delete")
+    if (key && !inputs.digit[i])
       digit.current[i - 1]?.focus();
-    else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();
+    // else if (e.key === "Backspace" && inputs.digit[i] == e.target.value) {
+    //   setTimeout(() => digit.current[i - 1]?.focus(), 200);
+    // }
+     else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();
     else if (e.key === "ArrowRight") digit.current[i + 1]?.focus();
-    // else if(e.target.value.length==1 && e.key === "Backspace" )
-    //   digit.current[i-1]?.focus()
   };
 
   return (
     <>
-      <div className={`container modal ${state.modal ? "" : "modal-hidden"}`}>
+      <div className={`container modal `}>
         <div className="modal-card">
           <div className="heading">
             <p>
@@ -158,8 +165,7 @@ export const OtpLayout = ({
                     onKeyDown={(e) => handleBackspace(e, i)}
                     value={inputs.digit[i]}
                     type="text"
-                    minLength={1}
-                    maxLength={1}
+                    // maxLength={1}
                   />
                 ))}
               <div className="spinner-box">

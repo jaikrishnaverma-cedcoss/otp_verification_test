@@ -124,6 +124,7 @@ text-decoration: underline;
 
 .disabled {
     color: grey !important;
+    cursor: alias !important;
 }
 .disabled:hover{
     text-decoration: none !important;

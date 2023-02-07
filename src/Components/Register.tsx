@@ -8,14 +8,14 @@ const Register = () => {
 
   // this function is responsible for generate otp
   const GenerateOtp = () => {
-    let max=''
-    let min='1'
-    for(let i =1 ; i<=otpLength; i++){
-      max+=9
-      if(i!==1)
-      min+=0
+    let max = "";
+    let min = "1";
+    for (let i = 1; i <= otpLength; i++) {
+      max += 9;
+      if (i !== 1) min += 0;
     }
-    let otp: number = Math.random() * (parseInt(max) - parseInt(min)) + parseInt(min);
+    let otp: number =
+      Math.random() * (parseInt(max) - parseInt(min)) + parseInt(min);
     otp = parseInt(otp.toString());
     setCurrentOtp(otp);
   };
@@ -32,37 +32,46 @@ const Register = () => {
     let val = e.target.value.toString();
     if (e.target.value.toString().length > 1)
       val = e.target.value.toString().substring(e.target.value.length - 1);
-    if (val.match(reg)){
-      setOtpLength(
-        parseInt(val)
-      );
+    if (val.match(reg)) {
+      setOtpLength(parseInt(val));
     }
   };
- 
+
   return (
     <>
-    <h2>Register Component</h2>
-      <label className="">Select Length Of OTP: </label>
-      <select name="take" className="otpLength" defaultValue={5} onChange={takeLength} id="">
-        {
-          [4,5,6,7,8].map(x=> <option value={x}>{x} digit OTP</option>)
-        }
-      </select>
-      <div>
-      <button className="btn btn-primary" onClick={modalOpener}>
-        Validate OTP
-      </button>
+      {" "}
+      <div className="container">
+        <h2>Register Component</h2>
+        <label className="">Select Length Of OTP: </label>
+        <select
+          name="take"
+          className="otpLength"
+          defaultValue={5}
+          onChange={takeLength}
+          id=""
+        >
+          {[4, 5, 6, 7, 8].map((x, i) => (
+            <option key={x + i} value={x}>
+              {x} digit OTP
+            </option>
+          ))}
+        </select>
+        <div>
+          <button className="btn btn-primary" onClick={modalOpener}>
+            Validate OTP
+          </button>
+        </div>
+        {/* model can itself open and closed with respect to open:boolean */}
+        {/* give conditional rendering just for unmount properly remove all ref and variable memory free */}
+        {modalState && (
+          <OtpLayout
+            open={modalState}
+            GenerateOtp={GenerateOtp}
+            currentOtp={currentOtp}
+            closeModal={setModalState}
+          />
+        )}
       </div>
-      {/* model can itself open and closed with respect to open:boolean */}
-      {/* give conditional rendering just for unmount properly remove all ref and variable memory free */}
-      {modalState && (
-        <OtpLayout
-          open={modalState}
-          GenerateOtp={GenerateOtp}
-          currentOtp={currentOtp}
-          closeModal={setModalState}
-        />
-      )}
     </>
   );
 };
