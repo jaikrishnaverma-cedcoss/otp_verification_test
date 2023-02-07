@@ -113,6 +113,10 @@ margin-top: 15px;
 text-decoration: underline;
 }
 
+.pointer{
+    cursor:pointer
+}
+
 .notification {
     color: green;
     font-size: 15px;

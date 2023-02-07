@@ -57,7 +57,7 @@ const Register = () => {
           ))}
         </select>
         <div>
-          <button className="btn btn-primary" onClick={modalOpener}>
+          <button className="btn btn-primary pointer" onClick={modalOpener}>
             Validate OTP
           </button>
         </div>

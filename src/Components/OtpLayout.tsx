@@ -50,15 +50,15 @@ export const OtpLayout = ({
       .map((x) => {
         inputs.digit.push("");
       });
+    setTimeout(() => {
+      digit.current[0]?.focus();
+    }, 200);
     setInputs({ ...inputs });
   };
 
   //  Default focus on first input when component mount
   useEffect(() => {
     filler();
-    setTimeout(() => {
-      digit.current[0]?.focus();
-    }, 100);
   }, []);
 
   //   responsible for timer when generateOtp function calls
@@ -78,60 +78,67 @@ export const OtpLayout = ({
   // responsible to handle all input digits and focus
   const InputDigits = (e: ChangeEvent<HTMLInputElement>, i: number) => {
     let val = e.currentTarget.value;
-      if (val.length > 1) {
-        val = val[val.length - 1];
+    if (val.length > 1) {
+      val = val[val.length - 1];
+      if (val == inputs.digit[i]) val = e.currentTarget.value[0];
+    }
+
+    if (/^[0-9]{1}$/.test(val) || val === "") {
+      if (val) {
+        digit.current[i + 1]?.focus();
       }
-      
-      if (/^[0-9]{1}$/.test(val) || val === "") {
-        if (val) {
-          digit.current[i + 1]?.focus();
+      if (val && inputs.digit[i] !== "") {
+        if (i < inputs.digit.length - 1) inputs.digit[i + 1] = val;
+      } else inputs.digit[i] = val;
+      state.msg = "";
+      inputs.statusClass = "";
+      if (inputs.digit.reduce((final, current) => final && current)) {
+        // status hold the value of otp matched or not
+        let status =
+          inputs.digit.toString().replaceAll(",", "") ===
+          currentOtp?.toString();
+        inputs.statusClass = status ? successClass : errorClass;
+        // if otp matched
+        if (status) {
+          state.msg = "Enter one time passcode is Correct!";
+          state.loader = true;
+          digit.current.forEach((x, index) => {
+            digit.current[index]?.blur();
+          });
+          //  after 1000 ms modal will closed automatically
+          setTimeout(() => {
+            closeModal(false);
+          }, 1000);
+        } else {
+          state.msg = "Enter one time passcode is Incorrect!";
         }
-        if(val &&  inputs.digit[i]!=='')
-        inputs.digit[i+1] = val;
-        else
-        inputs.digit[i] = val;
-        state.msg = "";
-        inputs.statusClass = "";
-        if (inputs.digit.reduce((final, current) => final && current)) {
-          // status hold the value of otp matched or not
-          let status =
-            inputs.digit.toString().replaceAll(",", "") ===
-            currentOtp?.toString();
-          inputs.statusClass = status ? successClass : errorClass;
-          // if otp matched
-          if (status) {
-            state.msg = "Enter one time passcode is Correct!";
-            state.loader = true;
-            digit.current.forEach((x, index) => {
-              digit.current[index]?.blur();
-            });
-            //  after 1000 ms modal will closed automatically
-            setTimeout(() => {
-              closeModal(false);
-            }, 1000);
-          } else {
-            state.msg = "Enter one time passcode is Incorrect!";
-          }
-        }
-        setInputs({ ...inputs });
-        setState({ ...state });
       }
-    
+      setInputs({ ...inputs });
+      setState({ ...state });
+    }
   };
 
   //  to handle input backSpace and focus
   const handleBackspace = (e: any, i: number) => {
-    console.log(e.key +'==='+ "Backspace" +'&&'+ inputs.digit[i] +'=='+ e.target.value)
-    let key=(e.key==="Backspace" || e.key === "Delete")
-    if (key && !inputs.digit[i])
-      digit.current[i - 1]?.focus();
-    // else if (e.key === "Backspace" && inputs.digit[i] == e.target.value) {
-    //   setTimeout(() => digit.current[i - 1]?.focus(), 200);
-    // }
-     else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();
+    console.log(
+      e.key +
+        "===" +
+        "Backspace" +
+        "&&" +
+        inputs.digit[i] +
+        "==" +
+        e.target.value
+    );
+    let key = e.key === "Backspace" || e.key === "Delete";
+    if (key && !inputs.digit[i]) digit.current[i - 1]?.focus();
+    else if (e.key === "Backspace" && inputs.digit[i] == e.target.value) {
+      setTimeout(() => digit.current[i - 1]?.focus(), 100);
+      inputs.digit[i - 1] = "";
+      setInputs({ ...inputs });
+    } else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();
     else if (e.key === "ArrowRight") digit.current[i + 1]?.focus();
   };
-
+  console.log(inputs);
   return (
     <>
       <div className={`container modal `}>
@@ -141,7 +148,10 @@ export const OtpLayout = ({
               Verify Email Address
               <span>({currentOtp})</span>
             </p>
-            <button className="btn btn-cross" onClick={() => closeModal(false)}>
+            <button
+              className="btn btn-cross pointer"
+              onClick={() => closeModal(false)}
+            >
               X
             </button>
           </div>
@@ -162,7 +172,7 @@ export const OtpLayout = ({
                     onChange={(e) => {
                       InputDigits(e, i);
                     }}
-                    onKeyDown={(e) => handleBackspace(e, i)}
+                    onKeyUp={(e) => handleBackspace(e, i)}
                     value={inputs.digit[i]}
                     type="text"
                     // maxLength={1}
@@ -183,8 +193,9 @@ export const OtpLayout = ({
             </p>
 
             <div className="card-details">
-              <p className={`info `} onClick={ResendOtp}>
+              <p className={`info `}>
                 <span
+                onClick={ResendOtp}
                   className={`resend ${
                     (timer > 0 || state.counter === 0) && "disabled"
                   }`}
