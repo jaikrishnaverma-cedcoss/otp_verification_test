@@ -1,13 +1,11 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { MyOtpLayoutProps } from "../Types/Types";
-type inp = {
-  digit: string[];
-  statusClass: string;
-};
-const initialInput: inp = {
+import { inputsType, MyOtpLayoutProps } from "../Types/Types";
+
+const initialInput: inputsType = {
   digit: [],
   statusClass: "",
 };
+
 export const OtpLayout = ({
   GenerateOtp,
   currentOtp,
@@ -15,39 +13,44 @@ export const OtpLayout = ({
 }: MyOtpLayoutProps) => {
   const successClass = "alert-input-success";
   const errorClass = "alert-input-danger";
-  const [state, setState] = useState({
-    counter: 4,
-    msg: "",
-    loader: false,
-  });
+  const [state, setState] = useState({ counter: 4, msg: "", loader: false });
   const [timer, setTimer] = useState<number>(60);
-  const [inputs, setInputs] = useState<inp>({ ...initialInput });
+  const [inputs, setInputs] = useState<inputsType>({ ...initialInput });
 
+  // ref array for all inputs
   const digit = useRef<HTMLInputElement[]>([]);
 
   // responsible for resend otp
   const ResendOtp = () => {
     if (timer === 0 && state.counter > 0) {
-      if (state.counter >= 0) GenerateOtp();
-      if (state.counter !== -1) state.counter = state.counter - 1;
+      if (state.counter >= 0) {
+        GenerateOtp();
+        state.counter = state.counter - 1;
+      }
       if (state.counter === -1) {
         setTimer(0);
       } else setTimer(60);
+
+      setState({ ...state, msg: "One-time passcode sent successfully!" });
+      // reset all inputs array and statusClass
+      setInputs({ ...initialInput });
+
+      // auto hide message after resend success notification
       setTimeout(() => {
         setState({ ...state, msg: "" });
       }, 1200);
-      setState({ ...state, msg: "One-time passcode sent successfully!" });
-      setInputs({ ...initialInput });
+      
+      
     }
   };
 
-  // fill the digit array to empty with the length of otp
+  // fill the digit array with empty with the length of otp
   const filler = () => {
     inputs.digit = [];
     currentOtp
       ?.toString()
       .split("")
-      .map((x) => {
+      .forEach((x) => {
         inputs.digit.push("");
       });
     setTimeout(() => {
@@ -65,10 +68,9 @@ export const OtpLayout = ({
   useEffect(() => {
     let interval: any = null;
     interval = setInterval(() => {
-      setTimer((prev) => (prev == 0 ? 0 : prev - 1));
+      setTimer((prev) => (prev === 0 ? 0 : prev - 1));
     }, 1000);
     filler();
-
     // callback function for clear interval when component unmount
     return () => {
       clearInterval(interval);
@@ -78,27 +80,28 @@ export const OtpLayout = ({
   // responsible to handle all input digits and focus
   const InputDigits = (e: ChangeEvent<HTMLInputElement>, i: number) => {
     let val = e.currentTarget.value;
+    // cutting the string to single digit
     if (val.length > 1) {
       val = val[val.length - 1];
-      if (val == inputs.digit[i]) val = e.currentTarget.value[0];
+      if (val === inputs.digit[i]) val = e.currentTarget.value[0];
     }
-
+    // now here the test condtion
     if (/^[0-9]{1}$/.test(val) || val === "") {
-      if (val) {
-        digit.current[i + 1]?.focus();
-      }
-      if (val && inputs.digit[i] !== "") {
-        if (i < inputs.digit.length - 1) inputs.digit[i + 1] = val;
-      } else inputs.digit[i] = val;
+      if (val) digit.current[i + 1]?.focus();
+
+      inputs.digit[i] = val;
       state.msg = "";
       inputs.statusClass = "";
+
+      // check all value filled
       if (inputs.digit.reduce((final, current) => final && current)) {
         // status hold the value of otp matched or not
         let status =
           inputs.digit.toString().replaceAll(",", "") ===
           currentOtp?.toString();
         inputs.statusClass = status ? successClass : errorClass;
-        // if otp matched
+
+        // if otp matched successfully
         if (status) {
           state.msg = "Enter one time passcode is Correct!";
           state.loader = true;
@@ -110,7 +113,7 @@ export const OtpLayout = ({
             closeModal(false);
           }, 1000);
         } else {
-          state.msg = "Enter one time passcode is Incorrect!";
+          state.msg = "Entered One-time passcode is incorrect!";
         }
       }
       setInputs({ ...inputs });
@@ -118,12 +121,11 @@ export const OtpLayout = ({
     }
   };
 
-  //  to handle input backSpace and focus
+  // responsible to handle input backSpace & del and focus
   const handleBackspace = (e: any, i: number) => {
-
     let key = e.key === "Backspace" || e.key === "Delete";
     if (key && !inputs.digit[i]) digit.current[i - 1]?.focus();
-    else if (e.key === "Backspace" && inputs.digit[i] == e.target.value) {
+    else if (e.key === "Backspace" && inputs.digit[i] === e.target.value) {
       setTimeout(() => digit.current[i - 1]?.focus(), 100);
       inputs.digit[i - 1] = "";
       setInputs({ ...inputs });
@@ -133,23 +135,24 @@ export const OtpLayout = ({
 
   return (
     <>
-      <div className={`container modal `}>
-        <div className="modal-card">
-          <div className="heading">
+      <div className="container container--modal">
+        <div className="card">
+          <div className="card__heading">
             <p>
               Verify Email Address
               <span>({currentOtp})</span>
             </p>
             <button
-              className="btn btn-cross pointer"
+              className="btn btn--cross pointer"
               onClick={() => closeModal(false)}
             >
               X
             </button>
           </div>
-          <div className="body">
-            <p>Enter Your Code Here:</p>
-            <div className="boxes">
+          <div className="card__body">
+            <p className="body__p">Enter Your Code Here:</p>
+            <div className="card__boxes">
+              {/* to generate input element dynamically */}
               {currentOtp
                 ?.toString()
                 .split("")
@@ -167,13 +170,13 @@ export const OtpLayout = ({
                     onKeyUp={(e) => handleBackspace(e, i)}
                     value={inputs.digit[i]}
                     type="text"
-                    // maxLength={1}
                   />
                 ))}
-              <div className="spinner-box">
+
+              <div className="card__spinner">
                 {state.loader && (
                   <img
-                    className="loader"
+                    className="spinner__icon"
                     src="Spinner-1s-200px.gif"
                     alt="loader"
                   />
@@ -184,22 +187,26 @@ export const OtpLayout = ({
               {state.msg}
             </p>
 
-            <div className="card-details">
+            <div className="card__details">
               <p className={`info `}>
                 <span
-                onClick={ResendOtp}
+                  onClick={ResendOtp}
                   className={`resend ${
                     (timer > 0 || state.counter === 0) && "disabled"
                   }`}
                 >
                   Resend One-Time Passcode.
                 </span>
-                <span className={`attempts ${state.counter == 0 && "warning"}`}>
+                <span
+                  className={`attempts  ${
+                    state.counter === 0 && "msg-alert-input-danger"
+                  }`}
+                >
                   ({state.counter} attempts left)
                 </span>
               </p>
               {/* here time formate done while renderning jsx ex: 0:2 => 00:02 */}
-              <p className="timer">{`
+              <p className="details__timer">{`
                 ${parseInt((timer / 60).toString()) < 10 ? "0" : ""}${parseInt(
                 (timer / 60).toString()
               )} :

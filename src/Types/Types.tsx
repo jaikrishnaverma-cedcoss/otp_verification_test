@@ -14,3 +14,8 @@ export type ModalStateTypes = {
     msg: string,
     loader: boolean,
   };
+
+export type inputsType = {
+  digit: string[];
+  statusClass: string;
+};

@@ -42,10 +42,10 @@ const Register = () => {
       {" "}
       <div className="container">
         <h2>Register Component</h2>
-        <label className="">Select Length Of OTP: </label>
+        <label >Select Length Of OTP: </label>
         <select
           name="take"
-          className="otpLength"
+          className="container__otpLength"
           defaultValue={5}
           onChange={takeLength}
           id=""
@@ -61,7 +61,6 @@ const Register = () => {
             Validate OTP
           </button>
         </div>
-        {/* model can itself open and closed with respect to open:boolean */}
         {/* give conditional rendering just for unmount properly remove all ref and variable memory free */}
         {modalState && (
           <OtpLayout

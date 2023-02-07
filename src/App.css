@@ -18,7 +18,7 @@
 
 /* cross button */
 
-.btn-cross{
+.btn--cross{
         border-radius: 7px;
         padding: 10px 15px;
         background-color: rgb(255, 0, 55);
@@ -34,7 +34,7 @@
 }
 
 /* modal plane*/
-.modal {
+.container--modal {
     background-color: rgba(0, 0, 0, 0.507);
     position: absolute;
     padding: 0px;
@@ -46,33 +46,34 @@
 }
 
 /* pop-up card under modal */
-.modal-card {
-    border-radius: 5px;
+.card {
+    border-radius: 10px;
     background-color: white;
     padding: 10px 20px;
     min-width: 400px;
     margin: 10px;
+    box-shadow: rgb(50 50 93 / 25%) 0px 50px 100px -20px, rgb(0 0 0 / 30%) 0px 30px 60px -30px, rgb(10 37 64 / 35%) 0px -2px 6px 0px inset;
 }
 
 /* heading of modal */
-.modal-card .heading {
+.card .card__heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid grey;
 }
 
-.timer {
+.details__timer {
     color: red;
     font-weight: 600;
 }
 
-.heading p {
+.card__heading p {
     font-weight: 600;
     font-size: 20px;
 }
 
-.modal-card .body .boxes {
+.card .card__body .card__boxes {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,27 +84,31 @@
 margin-top: 15px;
 }
 
-.modal-card .body p:nth-child(1) {
-    font-size: 14px;  
+.card .card__body p:nth-child(1) {
+    font-size: 16px;  
 }
 
-.modal-card .body .boxes input {
-    width: 40px;
-    height: 40px;
+.card .card__body .card__boxes input {
+    width: 45px;
+    height: 45px;
     border-radius: 5px;
     border: 1px solid grey;
     font-size: 20px;
     padding: 10px;
     margin: 5px;
+    text-align: center;
+}
+.body__p{
+    font-weight: 500;
 }
 
-.card-details {
+.card__details {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.card-details .info {
+.card__details .info {
     color: rgb(0, 103, 134);
     font-weight: 600;
     cursor:pointer
@@ -134,20 +139,20 @@ text-decoration: underline;
     text-decoration: none !important;
 }
 
-.spinner-box {
+.card__spinner {
     display: flex;
     justify-content: center;
 }
 
 .alert-input-danger {
-  border: 2px solid red !important
+  border: 3px solid red !important
 }
 
 .alert-input-success {
-    border: 2px solid green !important
+    border: 3px solid green !important
 }
 
-.loader {
+.spinner__icon {
     width: 100px;
     height: 100px;
 }
@@ -170,7 +175,7 @@ text-decoration: underline;
     color: green !important;
 }
 
-.otpLength{
+.container__otpLength {
     margin: 5px;
     padding: 6px 10px;
     width: 200px;
