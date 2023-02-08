@@ -15,7 +15,7 @@ export const OtpLayout = ({
 }: MyOtpLayoutProps) => {
   const [state, setState] = useState({ counter: 4, msg: "", loader: false });
   const [timer, setTimer] = useState<number>(60);
-  const [inputs, setInputs] = useState<inputsType>({ ...initialInput });
+  const [inputs, setInputs] = useState<inputsType>({ ...initialInput ,digit: (currentOtp)?currentOtp.toString().split("").map((x) =>""):[]});
 
   // ref array for all inputs
   const digit = useRef<HTMLInputElement[]>([]);
@@ -46,17 +46,9 @@ export const OtpLayout = ({
 
   // ()=> responsible  fill the digit array with empty string
   const filler = () => {
-    inputs.digit = [];
-    currentOtp
-      ?.toString()
-      .split("")
-      .forEach((x) => {
-        inputs.digit.push("");
-      });
     setTimeout(() => {
       digit.current[0]?.focus();
     }, 200);
-    setInputs({ ...inputs });
   };
 
   //  Default focus on first input when component mount
