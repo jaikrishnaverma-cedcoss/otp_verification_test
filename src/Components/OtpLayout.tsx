@@ -123,7 +123,6 @@ export const OtpLayout = ({
     else if (e.key === "ArrowRight") digit.current[i + 1]?.focus();
   };
 
-  console.log(inputs)
   return (
     <>
       <div className="container container--modal">
