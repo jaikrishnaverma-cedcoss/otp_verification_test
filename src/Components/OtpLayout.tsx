@@ -13,9 +13,10 @@ export const OtpLayout = ({
   currentOtp,
   closeModal,
 }: MyOtpLayoutProps) => {
+  const emptyLengthArray=(currentOtp)?currentOtp.toString().split("").map((x) =>""):[]
   const [state, setState] = useState({ counter: 4, msg: "", loader: false });
-  const [timer, setTimer] = useState<number>(60);
-  const [inputs, setInputs] = useState<inputsType>({ ...initialInput ,digit: (currentOtp)?currentOtp.toString().split("").map((x) =>""):[]});
+  const [timer, setTimer] = useState<number>(6);
+  const [inputs, setInputs] = useState<inputsType>({ ...initialInput ,digit:emptyLengthArray });
 
   // ref array for all inputs
   const digit = useRef<HTMLInputElement[]>([]);
@@ -29,7 +30,7 @@ export const OtpLayout = ({
       }
       if (state.counter === -1) {
         setTimer(0);
-      } else setTimer(60);
+      } else setTimer(6);
 
       setState({ ...state, msg: "One-time passcode sent successfully!" });
       // reset all inputs array and statusClass
@@ -63,6 +64,7 @@ export const OtpLayout = ({
       setTimer((prev) => (prev === 0 ? 0 : prev - 1));
     }, 1000);
     filler();
+    setInputs({...inputs,digit:emptyLengthArray})
     // callback function for clear interval when component unmount
     return () => {
       clearInterval(interval);
@@ -121,6 +123,7 @@ export const OtpLayout = ({
     else if (e.key === "ArrowRight") digit.current[i + 1]?.focus();
   };
 
+  console.log(inputs)
   return (
     <>
       <div className="container container--modal">
