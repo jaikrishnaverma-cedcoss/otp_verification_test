@@ -109,13 +109,13 @@ margin-top: 15px;
 }
 
 .card__details .info {
-    color: rgb(0, 103, 134);
+    color: rgb(0, 94, 122);
     font-weight: 600;
     cursor:pointer
 }
 
 .info .resend:hover{
-text-decoration: underline;
+    color: rgb(0, 143, 187);
 }
 
 .pointer{

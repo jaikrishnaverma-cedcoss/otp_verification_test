@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { inputsType, MyOtpLayoutProps } from "../Types/Types";
 
+const successClass = "alert-input-success";
+const errorClass = "alert-input-danger";
 const initialInput: inputsType = {
   digit: [],
   statusClass: "",
@@ -11,8 +13,6 @@ export const OtpLayout = ({
   currentOtp,
   closeModal,
 }: MyOtpLayoutProps) => {
-  const successClass = "alert-input-success";
-  const errorClass = "alert-input-danger";
   const [state, setState] = useState({ counter: 4, msg: "", loader: false });
   const [timer, setTimer] = useState<number>(60);
   const [inputs, setInputs] = useState<inputsType>({ ...initialInput });
@@ -20,8 +20,8 @@ export const OtpLayout = ({
   // ref array for all inputs
   const digit = useRef<HTMLInputElement[]>([]);
 
-  // responsible for resend otp
-  const ResendOtp = () => {
+  // ()=> responsible for resend otp
+  const  resendOtp = () => {
     if (timer === 0 && state.counter > 0) {
       if (state.counter >= 0) {
         GenerateOtp();
@@ -44,7 +44,7 @@ export const OtpLayout = ({
     }
   };
 
-  // fill the digit array with empty with the length of otp
+  // ()=> responsible  fill the digit array with empty string
   const filler = () => {
     inputs.digit = [];
     currentOtp
@@ -77,8 +77,8 @@ export const OtpLayout = ({
     };
   }, [GenerateOtp]);
 
-  // responsible to handle all input digits and focus
-  const InputDigits = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+  // ()=> responsible to handle all input digits and focus
+  const inputDigits = (e: ChangeEvent<HTMLInputElement>, i: number) => {
     let val = e.currentTarget.value;
     // cutting the string to single digit
     if (val.length > 1) {
@@ -121,15 +121,11 @@ export const OtpLayout = ({
     }
   };
 
-  // responsible to handle input backSpace & del and focus
+  // ()=> responsible to handle input backSpace & del and focus
   const handleBackspace = (e: any, i: number) => {
     let key = e.key === "Backspace" || e.key === "Delete";
     if (key && !inputs.digit[i]) digit.current[i - 1]?.focus();
-    else if (e.key === "Backspace" && inputs.digit[i] === e.target.value) {
-      setTimeout(() => digit.current[i - 1]?.focus(), 100);
-      inputs.digit[i - 1] = "";
-      setInputs({ ...inputs });
-    } else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();
+    else if (e.key === "ArrowLeft") digit.current[i - 1]?.focus();
     else if (e.key === "ArrowRight") digit.current[i + 1]?.focus();
   };
 
@@ -158,17 +154,25 @@ export const OtpLayout = ({
                 .split("")
                 .map((d, i) => (
                   <input
-                    key={d.toString() + i}
+                    key={d + i}
                     ref={(el: HTMLInputElement) => {
                       digit.current[i] = el;
                     }}
                     className={`${inputs.statusClass}`}
                     name="digit1"
                     onChange={(e) => {
-                      InputDigits(e, i);
+                      inputDigits(e, i);
                     }}
-                    onKeyUp={(e) => handleBackspace(e, i)}
+                    onKeyDown={(e) => handleBackspace(e, i)}
                     value={inputs.digit[i]}
+                    onKeyUp={(e)=>{
+                      // just for handle backspace when cursor placed before digit 
+                      if (e.key === "Backspace" && inputs.digit[i] === digit.current[i].value && inputs.digit[i]!=='') {
+                        digit.current[i - 1]?.focus()
+                        inputs.digit[i - 1] = "";
+                        setInputs({ ...inputs });
+                      } 
+                    }}
                     type="text"
                   />
                 ))}
@@ -190,7 +194,7 @@ export const OtpLayout = ({
             <div className="card__details">
               <p className={`info `}>
                 <span
-                  onClick={ResendOtp}
+                  onClick={ resendOtp}
                   className={`resend ${
                     (timer > 0 || state.counter === 0) && "disabled"
                   }`}
