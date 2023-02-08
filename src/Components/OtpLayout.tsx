@@ -15,7 +15,7 @@ export const OtpLayout = ({
 }: MyOtpLayoutProps) => {
   const emptyLengthArray=(currentOtp)?currentOtp.toString().split("").map((x) =>""):[]
   const [state, setState] = useState({ counter: 4, msg: "", loader: false });
-  const [timer, setTimer] = useState<number>(6);
+  const [timer, setTimer] = useState<number>(60);
   const [inputs, setInputs] = useState<inputsType>({ ...initialInput ,digit:emptyLengthArray });
 
   // ref array for all inputs
@@ -30,7 +30,7 @@ export const OtpLayout = ({
       }
       if (state.counter === -1) {
         setTimer(0);
-      } else setTimer(6);
+      } else setTimer(60);
 
       setState({ ...state, msg: "One-time passcode sent successfully!" });
       // reset all inputs array and statusClass
